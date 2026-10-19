@@ -1,0 +1,272 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}[hidden]{display:none!important}</style>
+<title>コンサート納品リスト</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@600;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap">
+<style>
+:root{
+  --paper:#f6f7fa; --card:#ffffff; --ink:#1d2640; --sub:#5b6478; --line:#d8dce6;
+  --accent:#7d3348; --accent-soft:#f3e7eb; --field:#fbfbfd;
+  --serif:"Shippori Mincho","Hiragino Mincho ProN","Yu Mincho",serif;
+  --sans:"Zen Kaku Gothic New","Hiragino Sans","Yu Gothic",system-ui,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --paper:#12151e; --card:#1b2030; --ink:#e8ebf3; --sub:#a0a8bb; --line:#343b50;
+  --accent:#d98aa0; --accent-soft:#3a2530; --field:#161a27; color-scheme:dark;}}
+:root[data-theme="dark"]{
+  --paper:#12151e; --card:#1b2030; --ink:#e8ebf3; --sub:#a0a8bb; --line:#343b50;
+  --accent:#d98aa0; --accent-soft:#3a2530; --field:#161a27; color-scheme:dark;}
+*{box-sizing:border-box}
+body{background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:15px;line-height:1.6;padding:0 16px}
+.wrap{max-width:760px;margin:0 auto;padding-block:20px 60px;display:flex;flex-direction:column;gap:18px}
+header.top{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;flex-wrap:wrap}
+header.top h1{font-family:var(--serif);font-size:1.5rem;margin:0;text-wrap:balance}
+header.top p{margin:0;color:var(--sub);font-size:.85rem}
+.tabs{display:flex;background:var(--card);border:1px solid var(--line);border-radius:999px;padding:4px;gap:4px}
+.tabs button{flex:1;border:0;background:transparent;color:var(--sub);font:inherit;font-weight:700;padding:10px 16px;border-radius:999px;cursor:pointer}
+.tabs button[aria-selected="true"]{background:var(--ink);color:var(--paper)}
+section.panel{display:flex;flex-direction:column;gap:14px}
+.box{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px;display:flex;flex-direction:column;gap:12px}
+label.f{display:flex;flex-direction:column;gap:4px;font-size:.8rem;color:var(--sub);font-weight:500;min-width:0}
+input{font:inherit;font-size:16px;color:var(--ink);background:var(--field);border:1px solid var(--line);border-radius:6px;padding:9px 10px;width:100%;min-width:0}
+input:focus,button:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.item{border:1px solid var(--line);border-radius:8px;padding:12px;display:grid;grid-template-columns:2fr 1.4fr;gap:10px;position:relative;background:var(--card)}
+.item .nums{grid-column:1/-1;display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;align-items:end}
+.item .no{position:absolute;top:-10px;left:10px;background:var(--card);padding:0 6px;font-size:.75rem;color:var(--accent);font-weight:700}
+.sub{font-variant-numeric:tabular-nums;font-weight:700;text-align:right;padding-bottom:9px}
+.sub small{display:block;font-size:.7rem;color:var(--sub);font-weight:400}
+.del{position:absolute;top:-11px;right:10px;border:1px solid var(--line);background:var(--card);color:var(--sub);border-radius:999px;font:inherit;font-size:.75rem;padding:1px 10px;cursor:pointer}
+.btns{display:flex;gap:10px;flex-wrap:wrap}
+.btn{border:1px solid var(--line);background:var(--card);color:var(--ink);font:inherit;font-weight:700;padding:11px 16px;border-radius:8px;cursor:pointer}
+.btn.pri{background:var(--accent);border-color:var(--accent);color:#fff}
+:root[data-theme="dark"] .btn.pri{color:#1b1015}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .btn.pri{color:#1b1015}}
+.btn.ghost{border-style:dashed;width:100%}
+.note{font-size:.78rem;color:var(--sub);margin:0}
+.sample{background:var(--accent-soft);color:var(--accent);font-size:.8rem;padding:8px 12px;border-radius:6px;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.sample button{border:0;background:transparent;color:var(--accent);font:inherit;font-weight:700;text-decoration:underline;cursor:pointer}
+
+/* slip */
+.slip{background:var(--card);border:1px solid var(--line);border-radius:4px;padding:24px 20px;display:flex;flex-direction:column;gap:16px}
+.slip h2{font-family:var(--serif);font-size:1.7rem;letter-spacing:.4em;text-align:center;margin:0;padding-bottom:10px;border-bottom:3px double var(--ink)}
+.meta{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;font-size:1rem}
+.meta dt{color:var(--sub);font-size:.8rem;padding-top:3px}
+.meta dd{margin:0;font-weight:700}
+.meta dd.seller{font-size:1.35rem;font-family:var(--serif)}
+.tbl{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums;min-width:440px}
+th{font-size:.75rem;color:var(--sub);font-weight:500;text-align:left;border-bottom:1.5px solid var(--ink);padding:6px 6px}
+td{padding:10px 6px;border-bottom:1px solid var(--line);vertical-align:top}
+td.n,th.n{text-align:right;white-space:nowrap}
+td.name{font-weight:700;font-size:1.05rem}
+td.cat span{display:inline-block;font-size:.75rem;background:var(--accent-soft);color:var(--accent);padding:1px 8px;border-radius:4px;white-space:nowrap}
+td.qty{font-size:1.2rem;font-weight:700}
+tfoot td{border-bottom:0;font-weight:700;padding-top:12px}
+.total{display:flex;justify-content:space-between;align-items:baseline;border-top:1.5px solid var(--ink);border-bottom:1.5px solid var(--ink);padding:12px 4px;gap:10px;flex-wrap:wrap}
+.total span{color:var(--sub);font-size:.85rem}
+.total b{font-size:1.6rem;font-variant-numeric:tabular-nums;font-family:var(--serif)}
+.cats{display:flex;flex-wrap:wrap;gap:8px}
+.cats div{border:1px solid var(--line);border-radius:6px;padding:6px 10px;font-size:.85rem;font-variant-numeric:tabular-nums}
+.cats div b{margin-left:6px}
+.sign{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.sign div{border:1px solid var(--line);border-radius:4px;height:72px;padding:6px 8px;font-size:.75rem;color:var(--sub)}
+.memo{font-size:.9rem;white-space:pre-wrap;border-left:3px solid var(--accent);padding-left:10px}
+.empty{color:var(--sub);text-align:center;padding:30px 0}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--paper);padding:10px 18px;border-radius:999px;font-size:.9rem;font-weight:700}
+textarea.fallback{width:100%;height:160px;font:inherit;font-size:13px;background:var(--field);color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:8px}
+@media (max-width:480px){.item{grid-template-columns:1fr}.row2{grid-template-columns:1fr}.slip{padding:20px 14px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div>
+      <h1>納品リスト</h1>
+      <p>入力して「渡す画面」をそのまま見せればOK</p>
+    </div>
+  </header>
+
+  <div class="tabs" role="tablist">
+    <button id="tab-in" role="tab" aria-selected="true">① 入力</button>
+    <button id="tab-out" role="tab" aria-selected="false">② 渡す画面</button>
+  </div>
+
+  <section class="panel" id="p-in">
+    <div class="sample" id="sampleBar"><span>サンプル入力が入っています</span><button id="clearAll" type="button">全部消して新規</button></div>
+    <div class="box">
+      <div class="row2">
+        <label class="f">出品者<input id="seller" placeholder="例: HEXA STAGE"></label>
+        <label class="f">納品日<input id="date" type="date"></label>
+      </div>
+      <div class="row2">
+        <label class="f">イベント名<input id="event" placeholder="例: ピアノコンサート"></label>
+        <label class="f">受取担当(任意)<input id="receiver" placeholder="例: 受付 ○○様"></label>
+      </div>
+    </div>
+
+    <div class="box">
+      <div id="items" style="display:flex;flex-direction:column;gap:18px;padding-top:6px"></div>
+      <button class="btn ghost" id="add" type="button">＋ 商品を追加</button>
+    </div>
+
+    <div class="box">
+      <label class="f">備考(任意)<input id="memo" placeholder="例: 売れ残りは終演後に回収します"></label>
+    </div>
+
+    <div class="btns">
+      <button class="btn pri" id="go" type="button">渡す画面を見る →</button>
+    </div>
+    <p class="note">入力内容はこの端末のブラウザに自動保存されます(別の端末には共有されません)。</p>
+    <div class="box">
+      <label class="f">保存したデータ(JSON)を読み込む<input id="imp" type="file" accept=".json,application/json"></label>
+      <p class="note">「②渡す画面」の「データ保存(JSON)」で保存したファイルを選ぶと、入力内容が復元されます。</p>
+    </div>
+  </section>
+
+  <section class="panel" id="p-out" hidden>
+    <div class="slip" id="slip"></div>
+    <div class="btns">
+      <button class="btn pri" id="csv" type="button">CSVで保存(Excel用)</button>
+      <button class="btn" id="json" type="button">データ保存(JSON)</button>
+      <button class="btn" id="copy" type="button">テキストでコピー</button>
+      <button class="btn" id="back" type="button">← 入力に戻る</button>
+    </div>
+    <div id="fb"></div>
+  </section>
+</div>
+
+<datalist id="cats">
+  <option value="LEDスタンド"><option value="アクリルスタンド"><option value="キーホルダー">
+  <option value="ステッカー"><option value="ポストカード"><option value="3Dプリント雑貨">
+  <option value="アクセサリー"><option value="NFCグッズ"><option value="その他">
+</datalist>
+
+<script>
+const $=s=>document.querySelector(s);
+const KEY="concert-nouhin-v1";
+const today=()=>{const d=new Date();return new Date(d-d.getTimezoneOffset()*6e4).toISOString().slice(0,10)};
+const SAMPLE={sample:true,seller:"HEXA STAGE",date:today(),event:"ピアノコンサート",receiver:"",memo:"",
+  items:[{name:"TOMOSHIBI LEDスタンド",cat:"LEDスタンド",qty:5,price:2500},
+         {name:"ピアノ柄アクリルキーホルダー",cat:"キーホルダー",qty:10,price:800},
+         {name:"音符ステッカー",cat:"ステッカー",qty:20,price:300}]};
+let st;
+try{st=JSON.parse(localStorage.getItem(KEY))}catch(e){}
+if(!st||!Array.isArray(st.items))st=structuredClone(SAMPLE);
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(st))}catch(e){}};
+const yen=n=>"¥"+(Number(n)||0).toLocaleString("ja-JP");
+const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+function bindHead(){
+  ["seller","date","event","receiver","memo"].forEach(k=>{
+    const el=$("#"+k); el.value=st[k]||""; el.oninput=()=>{st[k]=el.value;touch()};
+  });
+}
+function touch(){if(st.sample){st.sample=false;$("#sampleBar").hidden=true}save()}
+function renderItems(){
+  $("#sampleBar").hidden=!st.sample;
+  const box=$("#items");box.innerHTML="";
+  st.items.forEach((it,i)=>{
+    const d=document.createElement("div");d.className="item";
+    d.innerHTML=`<span class="no">商品 ${i+1}</span>
+      <button class="del" type="button">削除</button>
+      <label class="f">商品名<input id="n${i}" value="${esc(it.name)}" placeholder="商品名"></label>
+      <label class="f">種類<input id="c${i}" list="cats" value="${esc(it.cat)}" placeholder="選択 or 入力"></label>
+      <div class="nums">
+        <label class="f">納品数<input id="q${i}" type="number" inputmode="numeric" min="0" value="${it.qty??""}"></label>
+        <label class="f">金額(単価)<input id="p${i}" type="number" inputmode="numeric" min="0" value="${it.price??""}"></label>
+        <div class="sub"><small>小計</small><span id="s${i}">${yen(it.qty*it.price)}</span></div>
+      </div>`;
+    const up=()=>{it.name=d.querySelector("#n"+i).value;it.cat=d.querySelector("#c"+i).value;
+      it.qty=+d.querySelector("#q"+i).value||0;it.price=+d.querySelector("#p"+i).value||0;
+      d.querySelector("#s"+i).textContent=yen(it.qty*it.price);touch()};
+    d.querySelectorAll("input").forEach(x=>x.oninput=up);
+    d.querySelector(".del").onclick=()=>{st.items.splice(i,1);touch();renderItems()};
+    box.appendChild(d);
+  });
+}
+function fmtDate(s){if(!s)return"";const[y,m,d]=s.split("-");const w="日月火水木金土"[new Date(+y,m-1,+d).getDay()];return`${y}年${+m}月${+d}日(${w})`}
+function valid(){return st.items.filter(i=>i.name||i.qty||i.price)}
+function renderSlip(){
+  const its=valid();
+  const tq=its.reduce((a,i)=>a+(+i.qty||0),0), ta=its.reduce((a,i)=>a+(i.qty||0)*(i.price||0),0);
+  const cm={};its.forEach(i=>{const c=i.cat||"未分類";cm[c]=(cm[c]||0)+(+i.qty||0)});
+  $("#slip").innerHTML=`<h2>納品書</h2>
+    <dl class="meta">
+      <dt>出品者</dt><dd class="seller">${esc(st.seller)||"—"}</dd>
+      ${st.event?`<dt>イベント</dt><dd>${esc(st.event)}</dd>`:""}
+      <dt>納品日</dt><dd>${fmtDate(st.date)||"—"}</dd>
+      ${st.receiver?`<dt>受取</dt><dd>${esc(st.receiver)}</dd>`:""}
+    </dl>
+    ${its.length?`<div class="tbl"><table>
+      <thead><tr><th>No</th><th>商品名</th><th>種類</th><th class="n">納品数</th><th class="n">単価</th><th class="n">小計</th></tr></thead>
+      <tbody>${its.map((i,k)=>`<tr><td>${k+1}</td><td class="name">${esc(i.name)}</td><td class="cat">${i.cat?`<span>${esc(i.cat)}</span>`:""}</td>
+        <td class="n qty">${i.qty||0}</td><td class="n">${yen(i.price)}</td><td class="n">${yen(i.qty*i.price)}</td></tr>`).join("")}</tbody>
+      <tfoot><tr><td colspan="3">合計 ${its.length}品目</td><td class="n">${tq}点</td><td></td><td class="n">${yen(ta)}</td></tr></tfoot>
+    </table></div>
+    <div class="total"><span>納品数 合計 ${tq}点</span><b>${yen(ta)}</b></div>
+    <div class="cats">${Object.entries(cm).map(([c,q])=>`<div>${esc(c)}<b>${q}点</b></div>`).join("")}</div>`
+    :`<div class="empty">商品が入力されていません</div>`}
+    ${st.memo?`<div class="memo">${esc(st.memo)}</div>`:""}
+    <div class="sign"><div>納品者 署名</div><div>受領者 署名</div></div>`;
+}
+function asText(){
+  const its=valid();
+  const tq=its.reduce((a,i)=>a+(+i.qty||0),0), ta=its.reduce((a,i)=>a+(i.qty||0)*(i.price||0),0);
+  return [`【納品書】`,`出品者:${st.seller||""}`,st.event?`イベント:${st.event}`:"",`納品日:${fmtDate(st.date)}`,st.receiver?`受取:${st.receiver}`:"","",
+    ...its.map((i,k)=>`${k+1}. ${i.name}(${i.cat||"-"}) ${i.qty||0}点 × ${yen(i.price)} = ${yen(i.qty*i.price)}`),
+    "",`合計:${its.length}品目 / ${tq}点 / ${yen(ta)}`,st.memo?`備考:${st.memo}`:""].filter((l,i,a)=>l!==""||a[i-1]!=="").join("\n").trim();
+}
+function toast(m){const t=document.createElement("div");t.className="toast";t.textContent=m;document.body.appendChild(t);setTimeout(()=>t.remove(),1800)}
+function show(out){
+  $("#p-in").hidden=out;$("#p-out").hidden=!out;
+  $("#tab-in").setAttribute("aria-selected",!out);$("#tab-out").setAttribute("aria-selected",out);
+  if(out){renderSlip();$("#fb").innerHTML=""}
+  window.scrollTo(0,0);
+}
+$("#tab-in").onclick=()=>show(false);$("#tab-out").onclick=()=>show(true);
+$("#go").onclick=()=>show(true);$("#back").onclick=()=>show(false);
+$("#add").onclick=()=>{st.items.push({name:"",cat:"",qty:1,price:0});touch();renderItems();
+  const n=document.getElementById("n"+(st.items.length-1));n&&n.focus()};
+$("#clearAll").onclick=()=>{st={sample:false,seller:"",date:today(),event:"",receiver:"",memo:"",items:[{name:"",cat:"",qty:1,price:0}]};save();bindHead();renderItems()};
+$("#copy").onclick=()=>{const t=asText();
+  navigator.clipboard.writeText(t).then(()=>toast("コピーしました"),()=>{
+    $("#fb").innerHTML=`<p class="note">自動コピーできませんでした。下の文字を長押しでコピーしてください。</p><textarea class="fallback" id="fbt" readonly></textarea>`;
+    const a=$("#fbt");a.value=t;a.select();});
+};
+function fname(ext){return `納品_${(st.seller||"出品者").replace(/[\\/:*?"<>|]/g,"")}_${st.date||today()}.${ext}`}
+function asCSV(){
+  const q=v=>{const s=String(v??"");return /[",\n]/.test(s)?`"${s.replace(/"/g,'""')}"`:s};
+  const its=valid();
+  const tq=its.reduce((a,i)=>a+(+i.qty||0),0), ta=its.reduce((a,i)=>a+(i.qty||0)*(i.price||0),0);
+  const rows=[["出品者",st.seller],["イベント",st.event],["納品日",st.date],["受取",st.receiver],[],
+    ["No","商品名","種類","納品数","単価","小計"],
+    ...its.map((i,k)=>[k+1,i.name,i.cat,i.qty||0,i.price||0,(i.qty||0)*(i.price||0)]),
+    ["合計","","",tq,"",ta],[],["備考",st.memo]];
+  return "﻿"+rows.map(r=>r.map(q).join(",")).join("\r\n");
+}
+function saveFile(filename,data){
+  try{
+    const type=filename.endsWith(".csv")?"text/csv;charset=utf-8":"application/json;charset=utf-8";
+    const url=URL.createObjectURL(new Blob([data],{type}));
+    const a=document.createElement("a");a.href=url;a.download=filename;
+    document.body.appendChild(a);a.click();a.remove();
+    setTimeout(()=>URL.revokeObjectURL(url),1000);toast("保存しました");
+  }catch(e){toast("保存できませんでした")}
+}
+$("#csv").onclick=()=>saveFile(fname("csv"),asCSV());
+$("#json").onclick=()=>saveFile(fname("json"),JSON.stringify({...st,sample:false},null,2));
+$("#imp").onchange=e=>{const f=e.target.files[0];if(!f)return;
+  const r=new FileReader();r.onload=()=>{try{const d=JSON.parse(r.result);
+    if(!Array.isArray(d.items))throw 0;st={sample:false,seller:"",date:today(),event:"",receiver:"",memo:"",...d,sample:false};
+    save();bindHead();renderItems();toast("読み込みました")}catch(_){toast("このファイルは読み込めません")}
+    e.target.value=""};r.readAsText(f)};
+bindHead();renderItems();
+</script>
+
+</body>
+</html>
