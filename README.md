@@ -20,10 +20,16 @@
 
 ## 使い方
 
-`index.html` をブラウザで開くだけで使えます。サーバーやビルドは不要です。
+公開URL: https://tsuchicco0113-png.github.io/HEXA-delivery/
 
-GitHub Pages で公開する場合は、リポジトリの Settings → Pages で
-Branch を `main` / `/(root)` に設定してください。
+ブラウザで開くだけで使えます。サーバーやビルドは不要です。
+`index.html` をダウンロードして、ローカルで開いても動きます。
+
+## Pages の有効化
+
+1. https://github.com/tsuchicco0113-png/HEXA-delivery/settings/pages を開く
+2. Source を「Deploy from a branch」にし、Branch で `main` と `/ (root)` を選んで Save
+3. 数分待つと上記 URL でツールが開けるようになります
 
 ## 構成
 
