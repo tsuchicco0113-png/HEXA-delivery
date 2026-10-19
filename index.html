@@ -59,12 +59,13 @@ input:focus,button:focus-visible{outline:2px solid var(--accent);outline-offset:
 .meta dd{margin:0;font-weight:700}
 .meta dd.seller{font-size:1.35rem;font-family:var(--serif)}
 .tbl{overflow-x:auto}
-table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums;min-width:440px}
+table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}
 th{font-size:.75rem;color:var(--sub);font-weight:500;text-align:left;border-bottom:1.5px solid var(--ink);padding:6px 6px}
 td{padding:10px 6px;border-bottom:1px solid var(--line);vertical-align:top}
 td.n,th.n{text-align:right;white-space:nowrap}
 td.name{font-weight:700;font-size:1.05rem}
-td.cat span{display:inline-block;font-size:.75rem;background:var(--accent-soft);color:var(--accent);padding:1px 8px;border-radius:4px;white-space:nowrap}
+td.name .chip{display:inline-block;margin-top:4px;font-weight:500;font-size:.75rem;background:var(--accent-soft);color:var(--accent);padding:1px 8px;border-radius:4px;white-space:nowrap}
+td .unit{display:block;font-size:.72rem;color:var(--sub);font-weight:400}
 td.qty{font-size:1.2rem;font-weight:700}
 tfoot td{border-bottom:0;font-weight:700;padding-top:12px}
 .total{display:flex;justify-content:space-between;align-items:baseline;border-top:1.5px solid var(--ink);border-bottom:1.5px solid var(--ink);padding:12px 4px;gap:10px;flex-wrap:wrap}
@@ -203,10 +204,10 @@ function renderSlip(){
       ${st.receiver?`<dt>受取</dt><dd>${esc(st.receiver)}</dd>`:""}
     </dl>
     ${its.length?`<div class="tbl"><table>
-      <thead><tr><th>No</th><th>商品名</th><th>種類</th><th class="n">納品数</th><th class="n">単価</th><th class="n">小計</th></tr></thead>
-      <tbody>${its.map((i,k)=>`<tr><td>${k+1}</td><td class="name">${esc(i.name)}</td><td class="cat">${i.cat?`<span>${esc(i.cat)}</span>`:""}</td>
-        <td class="n qty">${i.qty||0}</td><td class="n">${yen(i.price)}</td><td class="n">${yen(i.qty*i.price)}</td></tr>`).join("")}</tbody>
-      <tfoot><tr><td colspan="3">合計 ${its.length}品目</td><td class="n">${tq}点</td><td></td><td class="n">${yen(ta)}</td></tr></tfoot>
+      <thead><tr><th>No</th><th>商品名 / 種類</th><th class="n">納品数</th><th class="n">金額</th></tr></thead>
+      <tbody>${its.map((i,k)=>`<tr><td>${k+1}</td><td class="name">${esc(i.name)}${i.cat?`<br><span class="chip">${esc(i.cat)}</span>`:""}</td>
+        <td class="n qty">${i.qty||0}</td><td class="n">${yen(i.qty*i.price)}<span class="unit">@${yen(i.price)}</span></td></tr>`).join("")}</tbody>
+      <tfoot><tr><td colspan="2">合計 ${its.length}品目</td><td class="n">${tq}点</td><td class="n">${yen(ta)}</td></tr></tfoot>
     </table></div>
     <div class="total"><span>納品数 合計 ${tq}点</span><b>${yen(ta)}</b></div>
     <div class="cats">${Object.entries(cm).map(([c,q])=>`<div>${esc(c)}<b>${q}点</b></div>`).join("")}</div>`
